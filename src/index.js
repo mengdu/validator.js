@@ -90,5 +90,5 @@ Message.prototype.first = function () {
   }
   return ''
 }
-if (window) window.Validator = Validator
+// if (window) window.Validator = Validator
 export default Validator

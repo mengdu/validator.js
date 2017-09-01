@@ -3,43 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>validator</title>
-    <script type="text/javascript" src="dist/validator.js"></script>
-    <script type="text/javascript">
-        var data = {
-          name: 'validator',
-          nickname: 'validator.js',
-          password: '123456',
-          confirm_password: '1234561',
-          age: 90,
-          token: null,
-          birthday: '2017-08-02 12:00'
-        }
+    <script type="text/javascript" src="src/validator.js"></script>
+<script type="text/javascript">
+  var data = {
+    name: 'validator',
+    nickname: 'validator.js',
+    password: '123456',
+    confirm_password: '1234561',
+    age: 90,
+    token: null,
+    birthday: '2017-08-02 12:00'
+  }
 
-        // Validator.addRule('between', function (target, val) {
-        //   return target > val[0] && target < val[1]
-        // })
-
-        var valid = new Validator()
-
-        valid.validate(data, {
-          name: {type: String, between: [6, 30]},
-          nickname: {type: String, between: [2, 30]},
-          password: {type: String, between: [6, 30]},
-          confirm_password: {type: String, value: data.password},
-          age: {type: Number, between: [18, 60]},
-          birthday: {},
-          token: {required: true, type: String},
-        }, {
-          'name': ':attr 字段验证不通过',
-          'name.type': '类型不正确',
-          'name.length': '长度不匹配',
-          'age': 'age',
-          "confirm_password.value": '两次输入密码不一致'
-        }, true)
-        $errors = valid.errors()
-
-        console.log(valid.fails(), $errors, $errors.has('name'))
-    </script>
+  validator.validate(data, {
+    name: {type: String, msg: '必须是字符串'},
+    nickname: {required: true, msg: '必须字段'},
+    password: [
+      {required: true, msg: '必须字段'},
+      {between: [12, 34], msg: '12~34'},
+      {type: String, msg: '必须是字符串'}
+    ],
+    confirm_password: [
+      {required: true, msg: '必须字段'},
+      {eq: '123456', msg: '两次输入密码必须相等'}
+    ]
+  })
+</script>
 </head>
 <body>
     
