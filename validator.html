@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>validator</title>
-    <script type="text/javascript" src="src/validator.js"></script>
+    <script type="text/javascript" src="dist/validator.js"></script>
 <script type="text/javascript">
   var data = {
     name: 'validator',
@@ -14,7 +14,7 @@
     token: null,
     birthday: '2017-08-02 12:00'
   }
-
+  console.log(validator)
   validator.validate(data, {
     name: {type: String, msg: '必须是字符串'},
     nickname: {required: true, msg: '必须字段'},

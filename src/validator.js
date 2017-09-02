@@ -35,10 +35,4 @@ var valid = {
 
   }
 }
-
-module.exports = valid
-/*if (typeof module !== 'undefined' && module.exports) {
-  module.exports = valid
-} else {
-  this.validator = valid
-}*/
+export default valid

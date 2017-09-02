@@ -3,7 +3,7 @@ var path = require('path')
 
 module.exports = [
 {
-  entry: './src/index.js',
+  entry: './src/test.js',
   output: {
     path: __dirname + '/dist',
     filename: 'validator.js'
@@ -25,7 +25,7 @@ module.exports = [
   }
 },
 {
-  entry: './src/index.js',
+  entry: './src/test.js',
   output: {
     path: __dirname + '/dist',
     filename: 'node-validator.js'
