@@ -1,46 +1,38 @@
+import {isArray} from './utils'
+import Validator from './validator'
+import Analyzer from './analyzer'
 
-function isArray (val) {
-  return Object.prototype.toString.call(val) === '[object Array]'
-}
-
-function formatCondition (cts) {
-  var condition = {}
-  for (var i in cts)
-  for (var type in cts[i]) {
-    var ct = cts[i]
+function formatConstraint (constraints) {
+  var constraint = {}
+  for (var i in constraints)
+  for (var type in constraints[i]) {
+    var cr = constraints[i]
     if (type !== 'msg') {
-      condition[type] = {val: ct[type]}
-      if (ct.msg) {
-        condition[type].msg = ct.msg
-      }
-      break
+      constraint[type] = {val: cr[type], msg: cr.msg}
     }
   }
-  return condition
+  return constraint
 }
 
 var valid = {
-  validate: function (data, conditions) {
+  Validator,
+  validate: function (data, constraints, isOne) {
     var vdata = {}
-    for (var key in conditions) {
+    for (var key in constraints) {
       vdata[key] = {}
-      if (isArray(conditions[key])) {
-        vdata[key] = formatCondition(conditions[key])
-      } else if (typeof conditions[key] === 'object') {
-        vdata[key] = formatCondition([conditions[key]])
+      if (isArray(constraints[key])) {
+        vdata[key] = formatConstraint(constraints[key])
+      } else if (typeof constraints[key] === 'object') {
+        vdata[key] = formatConstraint([constraints[key]])
       }
     }
+    console.log('格式化后：', vdata)
+    let valider = new Validator(data, vdata)
+    valider.validate(isOne)
+    return new Analyzer(valider)
   },
   verify: function (val, condition) {
 
   }
 }
-console.log('xxxx')
 export default valid
-
-// if (typeof module !== 'undefined' && module.exports) {
-//   console.log('xxx')
-//   module.exports = valid
-// } else {
-//   window.validator = valid
-// }

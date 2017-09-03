@@ -1,27 +1,14 @@
-
-function isArray (val) {
-  return Object.prototype.toString.call(val) === '[object Array]'
-}
-
-/**
-* 判断一值是否存在数组里
-***/
-const inArray = (val, arr) => {
-  for (let k in arr) {
-    if (arr[k] === val) return true
-  }
-  return false
-}
+import {isArray, inArray} from './utils'
 
 export default {
   // 规则名 (待验证值, 规则值) {return Boolean}
-  required (target, value) {
-    if (value) {
-      return !!target
+  required (target, val) {
+    if (val) {
+      return target !== undefined
     }
     return true
   },
-  value (target, value) {
+  eq (target, value) {
     return target === value
   },
   not (target, value) {
@@ -35,19 +22,19 @@ export default {
     return target.constructor === val
   },
   length (target, val) {
-    return target.length === val
+    return !!(target && target.length && (target.length === val))
   },
   min (target, val) {
     if (typeof target === 'string' || isArray(target)) {
-      return target.length > val
+      return target.length >= val
     }
-    return target > val
+    return target >= val
   },
   max (target, val) {
     if (typeof target === 'string' || isArray(target)) {
-      return target.length < val
+      return target.length <= val
     }
-    return target < val
+    return target <= val
   },
   between (target, val) {
     if (typeof target === 'string' || isArray(target)) {

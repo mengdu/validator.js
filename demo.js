@@ -1,4 +1,4 @@
-var valid = require('./dist/node-validator.js')
+var valid = require('./dist/validator.js')
 
 console.log(valid)
 var data = {
@@ -10,6 +10,7 @@ var data = {
   token: null,
   birthday: '2017-08-02 12:00'
 }
+
 
 valid.validate(data, {
   name: {type: String, msg: 'xxx'},
