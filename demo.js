@@ -1,4 +1,4 @@
-var valid = require('./dist/validator.js')
+var valid = require('./dist/node-validator.js')
 
 console.log(valid)
 var data = {
@@ -19,4 +19,3 @@ valid.validate(data, {
     {type: String, msg: '必须字符串'}
   ]
 })
-

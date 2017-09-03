@@ -1,94 +1,46 @@
-import rules from './rules'
 
-
-function Validator() {
-  if (!this instanceof Validator){
-    throw new Error('Validator is a constructor and should be called with the `new` keyword')
-  }
-  this.msg = {}
-  this.count = 0
-  this.attr = {}
+function isArray (val) {
+  return Object.prototype.toString.call(val) === '[object Array]'
 }
 
-Validator.addRule = function (type, rule) {
-  if (typeof type !== 'string')  throw new Error('rule key must be string')
-  if (typeof rule !== 'function')  throw new Error('rule must be function')
-  rules[type] = rule
-}
-
-Validator.prototype.validateValue = function (value, ruleType, ruleVal) {
-  if (!rules[ruleType]) {
-    throw new Error(`Validation rule type:$ruleType is not supported`)
-  }
-  return rules[ruleType].call(null, value, ruleVal)
-}
-
-Validator.prototype.validateRules = function (key, value, rule, msgs) {
-  for (var ruleType in rule) {
-    var result = this.validateValue(value, ruleType, rule[ruleType])
-    this.attr[key] = result
-    // 如果验证失败
-    if (!result) {
-      this.count++
-      // msgs[key] && msgs[]
-      if (msgs[key]) {
-        if (!this.msg[key]) {
-          this.msg[key] = [msgs[key]]
-        }
+function formatCondition (cts) {
+  var condition = {}
+  for (var i in cts)
+  for (var type in cts[i]) {
+    var ct = cts[i]
+    if (type !== 'msg') {
+      condition[type] = {val: ct[type]}
+      if (ct.msg) {
+        condition[type].msg = ct.msg
       }
-      var msgKey = key + '.' + ruleType
-      if (msgs[msgKey]) {
-        if (!this.msg[key]) {
-          this.msg[key] = [msgs[msgKey]]
-        } else {
-          // console.log(msgs[msgKey])
-          this.msg[key].push(msgs[msgKey])
-        }
-      }
-    }
-  }
-}
-
-Validator.prototype.validate = function (obj, rules, msgs, isAll) {
-  for (var ruleKey in rules) {
-    var rule = rules[ruleKey]
-    this.validateRules(ruleKey, obj[ruleKey], rule, msgs)
-    // 如果isAll==false只要有字段验证不通则返回
-    if (!isAll && this.count > 0) {
       break
     }
   }
-  return this
+  return condition
 }
 
-Validator.prototype.fails = function () {
-  return !!this.count
-}
+var valid = {
+  validate: function (data, conditions) {
+    var vdata = {}
+    for (var key in conditions) {
+      vdata[key] = {}
+      if (isArray(conditions[key])) {
+        vdata[key] = formatCondition(conditions[key])
+      } else if (typeof conditions[key] === 'object') {
+        vdata[key] = formatCondition([conditions[key]])
+      }
+    }
+  },
+  verify: function (val, condition) {
 
-
-Validator.prototype.errors = function () {
-  // return this.msg
-  return new Message(this.msg)
-}
-
-function Message (msgs) {
-  this.msg = msgs
-}
-
-Message.prototype.has = function (key) {
-  return this.msg[key] ? true : false
-}
-
-Message.prototype.add = function (key, msg) {
-  this.msg[key] ? this.msg[key].push(msg) : this.msg[key] = [msg]
-}
-
-Message.prototype.first = function () {
-  for (var key in this.msg) {
-    return this.msg[key][0]
-    break
   }
-  return ''
 }
-// if (window) window.Validator = Validator
-export default Validator
+console.log('xxxx')
+export default valid
+
+// if (typeof module !== 'undefined' && module.exports) {
+//   console.log('xxx')
+//   module.exports = valid
+// } else {
+//   window.validator = valid
+// }
