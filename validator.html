@@ -6,18 +6,18 @@
     <script type="text/javascript" src="dist/validator.js"></script>
 <script type="text/javascript">
   var data = {
-    name: 1234,
+    // name: 1234,
     nickname: 'validator.js',
-    password: '123456',
+    // password: '123456',
     confirm_password: '1234561',
     age: 24,
     birthday: '2017-08-02 12:00',
     // token: 'xxxx'
   }
-  console.log(validator)
+  // console.log(validator)
   var valid = validator.validate(data, {
     name: [
-      // {required: false, msg: 'name字段必须的'},
+      {required: true, msg: 'name字段必须的'},
       {eq: '1234', msg: '值等于1234'},
       {min: 9, msg: '长度必须 >= 9'},
       {max: 30, msg: '长度必须 <= 30'},
@@ -38,8 +38,9 @@
     // ]
   }, 0)
 
-
-  console.log(valid.all())
+  console.log('结果对象', valid.valider())
+  console.log('验证未通过', valid.fails())
+  console.log(valid.all(1))
 
 </script>
 </head>

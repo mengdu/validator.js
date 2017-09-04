@@ -23,7 +23,7 @@ Validator.prototype.validate = function (isOne) {
       count += ~~!bool
       result[field][type] = {val: rule.val, msg: rule.msg, result: bool}
     }
-    console.log(field, count, constraint.required)
+    // console.log(field, count, constraint.required)
     if (count > 0) {
       if (constraint.required && constraint.required.val) {
         this.count++
@@ -38,7 +38,7 @@ Validator.prototype.validate = function (isOne) {
     }
   }
   this.results = result
-  console.log('验证结果：', result)
+  // console.log('验证结果：', result)
   return result
 }
 

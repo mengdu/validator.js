@@ -1,5 +1,5 @@
 // 验证分析
-function analyzer (validator) {
+function Analyzer (validator) {
 
   // console.log(validator)
   var that = this
@@ -7,7 +7,6 @@ function analyzer (validator) {
     return validator
   }
   this.errors = {}
-  this.msgs = []
   // 代理
   return new Proxy(validator.results, {
     get (target, key) {
@@ -17,16 +16,20 @@ function analyzer (validator) {
       } else {
         return that[key]
       }
+    },
+    set (target, key, val) {
+      // 防止this访问污染results
+      return that[key] = val
     }
   })
 }
-analyzer.prototype.parseMsg = function (msg) {
+Analyzer.prototype.parseMsg = function (msg) {
   return msg
 }
-analyzer.prototype.fails = function () {
+Analyzer.prototype.fails = function () {
   return this.valider().count > 0
 }
-analyzer.prototype.all = function (isArr) {
+Analyzer.prototype.all = function (isArr) {
   for (let field in this.valider().results) {
     this.errors[field] = this.get(field)
   }
@@ -39,14 +42,13 @@ analyzer.prototype.all = function (isArr) {
         }
       }
     }
-    this.msgs = err
     return err
   } else {
     return this.errors
   }
 }
 
-analyzer.prototype.get = function (field, isOrign) {
+Analyzer.prototype.get = function (field, isOrign) {
   var result = this.valider().results[field]
   if (!result) {
     console.warn('The field does not exist in constraints')
@@ -74,10 +76,10 @@ analyzer.prototype.get = function (field, isOrign) {
   }
   return msg
 }
-analyzer.prototype.has = function (field) {
+Analyzer.prototype.has = function (field) {
   return this.get(field).length > 0
 }
-analyzer.prototype.first = function (field) {
+Analyzer.prototype.first = function (field) {
   if (field) {
     return this.get(field)[0]
   }
@@ -90,9 +92,9 @@ analyzer.prototype.first = function (field) {
     }
   }
 }
-analyzer.prototype.last = function (field) {
+Analyzer.prototype.last = function (field) {
   var msgs = this.get(field)
   return msgs[msgs.length - 1]
 }
 
-export default analyzer
+export default Analyzer

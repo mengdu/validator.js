@@ -26,7 +26,7 @@ var valid = {
         vdata[key] = formatConstraint([constraints[key]])
       }
     }
-    console.log('格式化后：', vdata)
+    // console.log('格式化后：', vdata)
     let valider = new Validator(data, vdata)
     valider.validate(isOne)
     return new Analyzer(valider)
