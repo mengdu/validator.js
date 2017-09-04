@@ -7,7 +7,7 @@ function analyzer (validator) {
     return validator
   }
   this.errors = {}
-
+  this.msgs = []
   // 代理
   return new Proxy(validator.results, {
     get (target, key) {
@@ -26,11 +26,24 @@ analyzer.prototype.parseMsg = function (msg) {
 analyzer.prototype.fails = function () {
   return this.valider().count > 0
 }
-analyzer.prototype.all = function () {
+analyzer.prototype.all = function (isArr) {
   for (let field in this.valider().results) {
     this.errors[field] = this.get(field)
   }
-  return this.errors
+  if (isArr) {
+    var err = []
+    for (let field in this.errors) {
+      if (this.errors[field].length > 0) {
+        for (var i in this.errors[field]) {
+          err.push(this.errors[field][i])
+        }
+      }
+    }
+    this.msgs = err
+    return err
+  } else {
+    return this.errors
+  }
 }
 
 analyzer.prototype.get = function (field, isOrign) {
