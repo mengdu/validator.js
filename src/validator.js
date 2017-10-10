@@ -38,7 +38,7 @@ Validator.prototype.validate = function (isOne) {
     }
   }
   this.results = result
-  console.log('验证结果：', result)
+  // console.log('验证结果：', result)
   return result
 }
 

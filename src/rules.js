@@ -53,5 +53,10 @@ export default {
       return ruleVal.indexOf(targetVal) > -1
     }
     return false
+  },
+  match (val, regexp) {
+    if (typeof val !== 'string') return false
+    var reg = new RegExp(regexp)
+    return reg.test(val)
   }
 }
