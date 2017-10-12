@@ -6,40 +6,25 @@
     <script type="text/javascript" src="dist/validator.js"></script>
 <script type="text/javascript">
   var data = {
-    name: 1234,
-    nickname: 'validator.js',
-    password: '123456',
-    confirm_password: '1234561',
-    age: 24,
-    birthday: '2017-08-02 12:00',
-    // token: 'xxxx'
+    test: '60',
+    info: 'abc'
   }
   console.log(validator)
   var valid = validator.validate(data, {
-    name: [
-      // {required: false, msg: 'name字段必须的'},
-      {eq: '1234', msg: '值等于1234'},
-      {min: 9, msg: '长度必须 >= 9'},
-      {max: 30, msg: '长度必须 <= 30'},
-      {type: String, msg: '类型必须是字符串'}
-    ],
-    age: {between: [18, 70], msg: '年龄范围18~70'},
-    nickname: {required: true, msg: '必须字段'},
-    password: {length: 7, msg: 'xxx'}
-    // token: {required: false, length: 4, msg: 'xx'},
-    // password: [
-    //   {required: true, msg: '必须字段'},
-    //   {between: [12, 34], msg: '12~34'},
-    //   {type: String, msg: '必须是字符串'}
-    // ],
-    // confirm_password: [
-    //   {required: true, msg: '必须字段'},
-    //   {eq: '123456', msg: '两次输入密码必须相等'}
-    // ]
-  }, 0)
+    name: {
+      required: false, msg: 'xxx'
+    },
+    commit: {required: false, length: 123, msg: 'commit len 123'},
+    test: {between: [50, 100], msg: '必须 50 ~ 100'},
+    nickname: {eq: 123, msg: 'val 123'},
+    info: {length: [4, 5], msg: 'length err'}
+  })
 
-
+  console.log('验证结果：', !valid.fails())
+  console.log(valid.first())
   console.log(valid.all())
+  console.log(valid.valider())
+
 
 </script>
 </head>

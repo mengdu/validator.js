@@ -6,19 +6,19 @@ function analyzer (validator) {
   this.valider = function () {
     return validator
   }
-  this.errors = {}
+  this.errors = null
   this.msgs = []
   // 代理
-  return new Proxy(validator.results, {
-    get (target, key) {
-      // 优先访问results
-      if (target[key]) {
-        return target[key]
-      } else {
-        return that[key]
-      }
-    }
-  })
+  // return new Proxy(validator.results, {
+  //   get (target, key) {
+  //     // 优先访问results
+  //     if (target[key]) {
+  //       return target[key]
+  //     } else {
+  //       return that[key]
+  //     }
+  //   }
+  // })
 }
 analyzer.prototype.parseMsg = function (msg) {
   return msg
@@ -27,8 +27,11 @@ analyzer.prototype.fails = function () {
   return this.valider().count > 0
 }
 analyzer.prototype.all = function (isArr) {
-  for (let field in this.valider().results) {
-    this.errors[field] = this.get(field)
+  if (!this.errors) {
+    this.errors = {}
+    for (let field in this.valider().results) {
+      this.errors[field] = this.get(field)
+    }
   }
   if (isArr) {
     var err = []
@@ -58,11 +61,11 @@ analyzer.prototype.get = function (field, isOrign) {
   // 当需要验证数据不存在此字段并且不必须的字段时，返回[]
   if (this.valider().data[field] === undefined) {
     // 不提供required验证情况
-    if (!result.required) {
+    if (!result.hasOwnProperty('required')) {
       return []
     }
     // 存在required验证情况
-    if (result.required && result.required.result) {
+    if (result.hasOwnProperty('required') && result.required.result) {
       return []
     }
   }

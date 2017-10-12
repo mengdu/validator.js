@@ -22,7 +22,12 @@ export default {
     return target.constructor === val
   },
   length (target, val) {
-    return !!(target && target.length && (target.length === val))
+    if (!isArray(val)) {
+      return !!(target && target.length && (target.length === val))
+    }
+    if (typeof target === 'string' || isArray(target)) {
+      return target.length >= val[0] && target.length <= val[1]
+    }
   },
   min (target, val) {
     if (typeof target === 'string' || isArray(target)) {
@@ -37,9 +42,6 @@ export default {
     return target <= val
   },
   between (target, val) {
-    if (typeof target === 'string' || isArray(target)) {
-      return target.length >= val[0] && target.length <= val[1]
-    }
     return target >= val[0] && target <= val[1]
   },
   in (targetVal, ruleVal) {
