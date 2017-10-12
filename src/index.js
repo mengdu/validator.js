@@ -1,7 +1,7 @@
 import {isArray} from './utils'
 import Validator from './validator'
 import Analyzer from './analyzer'
-
+import Rules from './rules'
 function formatConstraint (constraints) {
   var constraint = {}
   for (var i in constraints)
@@ -16,6 +16,7 @@ function formatConstraint (constraints) {
 
 var valid = {
   Validator,
+  Rule: Rules,
   validate: function (data, constraints, isOne) {
     var vdata = {}
     for (var key in constraints) {
@@ -31,8 +32,18 @@ var valid = {
     valider.validate(isOne)
     return new Analyzer(valider)
   },
-  verify: function (val, condition) {
-
+  pushRule: function (type, fun) {
+    if (Rules.hasOwnProperty(type)) {
+      console.warn('The rule type `' + type + '` is exist')
+      return false
+    }
+    if (typeof fun !== 'function') {
+      console.warn('The rule fun must be a function')
+      return false
+    }
+    Rules[type] = fun
+    console.log(Rules)
+    return true
   }
 }
 export default valid

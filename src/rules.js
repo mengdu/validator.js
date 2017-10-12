@@ -30,15 +30,9 @@ export default {
     }
   },
   min (target, val) {
-    if (typeof target === 'string' || isArray(target)) {
-      return target.length >= val
-    }
     return target >= val
   },
   max (target, val) {
-    if (typeof target === 'string' || isArray(target)) {
-      return target.length <= val
-    }
     return target <= val
   },
   between (target, val) {
