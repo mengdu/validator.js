@@ -2,7 +2,6 @@
 
 一个简单的数据验证对象，适用于浏览器与node环境。
 
-
 [文档](https://mengdu.github.io/validator.js/docs)
 
 ## use
