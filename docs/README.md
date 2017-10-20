@@ -2,6 +2,7 @@
 
 一个简单的数据验证对象，适用于浏览器与node环境。
 
+
 [文档](https://mengdu.github.io/validator.js)
 [在线例子](https://mengdu.github.io/validator.js/#/demo)
 
@@ -111,11 +112,29 @@ validator.validate(data, constraints)
   + **`not`** 非
   + **`type`** 符合的数据类型，支持 `String`, `Object`, `Array`, `Number`, `Boolean`, `Date`, ...包括自定义对象  (除`null` , `undefined`)
   + **`length`** 长度，支持数组与字符串数据
-  + **`min`** 小于，支持数字，字符串
-  + **`max`** 大于
-  + **`between`** 数字范围，注：字符串比较问题 `'60' >= 100`
+  + **`min`** 大于等于，支持数字，字符串
+  + **`max`** 小于等于
+  + **`gt`** 大于 >
+  + **`gte`** 大于等于 >= (同min)
+  + **`lt`** 小于 <
+  + **`lte`** 小于等于 <= (同max)
+  + **`between`** 数字范围，注：字符串比较问题 `'60' >= '100'`
+  + **`notBetween`** 不在范围
   + **`in`** 在里面，支持数组，对象，字符串
-  + **`match`** 正则
+  + **`notIn`** 不在里面
+  + **`match`** 匹配正则
+  + **`notMatch`** 不匹配正则
+  + **`like`** 模糊匹配，类似sql中的like规则；例如：`{like: 'abc%', '必须以abc开头'}` 
+  + **`notLike`** `like` 反义
+  + **`email`** 匹配邮箱
+  + **`upperCase`** 匹配大写
+  + **`lowerCase`** 匹配小写
+  + **`run`** 自定义执行过程，执行函数必须同步返回，暂不支持async/await；例如：`{run: (id) => {return true}, msg: ''}`
+  
+  
+  
+  
+  
 
 ## 自定义Rule
 
