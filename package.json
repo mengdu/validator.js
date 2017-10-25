@@ -1,5 +1,5 @@
 {
-  "name": "v",
+  "name": "vdjs",
   "version": "1.0.0",
   "description": "A simple JavaScript data validation library.",
   "main": "dist/validator.min.js",
@@ -22,7 +22,7 @@
     "validator.js",
     "valid",
     "validate",
-    "v"
+    "vdjs"
   ],
   "homepage": "https://github.com/mengdu/validator.js#readme",
   "devDependencies": {

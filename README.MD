@@ -12,12 +12,12 @@
 install:
 
 ```bat
-npm install -S v
+npm install -S vdjs
 
 ```
 
 ```js
-const Validator = require('v')
+const Validator = require('vdjs')
 
 var valid = Validator.validate(data, {})
 

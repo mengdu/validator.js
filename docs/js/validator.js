@@ -143,41 +143,56 @@ var asyncGenerator = function () {
 
 var Rule = {
   // 规则名 (待验证值, 规则值) {return Boolean}
-  required: function required(target, val) {
-    if (val) {
-      return target !== undefined;
+  required: function required(val, rval) {
+    if (rval) {
+      return val !== undefined;
     }
     return true;
   },
-  eq: function eq(target, value) {
-    return target === value;
+  eq: function eq(val, rval) {
+    return val === rval;
   },
-  not: function not(target, value) {
-    return target !== value;
+  not: function not(val, rval) {
+    return val !== rval;
   },
-  type: function type(target, val) {
-    if (target === null || target === undefined) {
-      return target === val;
+  type: function type(val, rval) {
+    if (val === null || val === undefined) {
+      return val === rval;
     }
     // String,Object,Array,Number,Boolean,Date,...包括自定义对象  (除null,undefined)
-    return target.constructor === val;
+    return val.constructor === rval;
   },
-  length: function length(target, val) {
-    if (!isArray(val)) {
-      return !!(target && target.length && target.length === val);
+  length: function length(val, rval) {
+    if (!isArray(rval)) {
+      return !!(val && val.length && val.length === rval);
     }
-    if (typeof target === 'string' || isArray(target)) {
-      return target.length >= val[0] && target.length <= val[1];
+    if (typeof val === 'string' || isArray(val)) {
+      return val.length >= rval[0] && val.length <= rval[1];
     }
   },
-  min: function min(target, val) {
-    return target >= val;
+  min: function min(val, rval) {
+    return val >= rval;
   },
-  max: function max(target, val) {
-    return target <= val;
+  max: function max(val, rval) {
+    return val <= rval;
   },
-  between: function between(target, val) {
-    return target >= val[0] && target <= val[1];
+  gt: function gt(val, rval) {
+    return val > rval;
+  },
+  gte: function gte(val, rval) {
+    return val >= rval;
+  },
+  lt: function lt(val, rval) {
+    return val < rval;
+  },
+  lte: function lte(val, rval) {
+    return val <= rval;
+  },
+  between: function between(val, rval) {
+    return rval[0] <= val && val <= rval[1];
+  },
+  notBetween: function notBetween(val, rval) {
+    return val < rval[0] || val > rval[1];
   },
   in: function _in(targetVal, ruleVal) {
     if (isArray(ruleVal)) {
@@ -191,10 +206,81 @@ var Rule = {
     }
     return false;
   },
+  notIn: function notIn(val, rval) {
+    if (isArray(rval)) {
+      return !inArray(val, rval);
+    }
+    if ((typeof rval === 'undefined' ? 'undefined' : _typeof(rval)) === 'object') {
+      return !(val in rval);
+    }
+    if (typeof rval === 'string') {
+      return rval.indexOf(val) === -1;
+    }
+    return false;
+  },
   match: function match(val, regexp) {
     if (typeof val !== 'string') return false;
     var reg = new RegExp(regexp);
     return reg.test(val);
+  },
+  notMatch: function notMatch(val, regexp) {
+    if (typeof val !== 'string') return false;
+    var reg = new RegExp(regexp);
+    return !reg.test(val);
+  },
+  like: function like(val, rval) {
+    // like 
+    //   %abc     /abc$/
+    //   abc%     /^abc/
+    //   a%bc     /^a.*bc$/
+    //   %a%bc    /a.*cb$/
+    //   a%bc%    /^a.*bc/
+    //   %a%bc%   /a.*bc/
+    if (typeof rval !== 'string') return false;
+    if (rval[0] !== '%') {
+      rval = '^' + rval;
+    }
+    if (rval[rval.length - 1] !== '%') {
+      rval = rval + '$';
+    }
+    var regexp = new RegExp(rval.replace(/%/g, '.*'));
+    return regexp.test(val);
+  },
+  notLike: function notLike(val, rval) {
+    if (typeof rval !== 'string') return false;
+    if (rval[0] !== '%') {
+      rval = '^' + rval;
+    }
+    if (rval[rval.length - 1] !== '%') {
+      rval = rval + '$';
+    }
+    var regexp = new RegExp(rval.replace(/%/g, '.*'));
+    return !regexp.test(val);
+  },
+  email: function email(val, rval) {
+    var regexp = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+    if (rval) {
+      return regexp.test(val);
+    }
+    return true;
+  },
+  upperCase: function upperCase(val, rval) {
+    if (rval) {
+      return val === val.toUpperCase();
+    }
+    return true;
+  },
+  lowerCase: function lowerCase(val, rval) {
+    if (rval) {
+      return val === val.toLowerCase();
+    }
+    return true;
+  },
+  run: function run(val, rval) {
+    if (typeof rval === 'function') {
+      return rval(val);
+    }
+    return true;
   }
 };
 
@@ -391,3 +477,4 @@ var valid = {
 return valid;
 
 })));
+//# sourceMappingURL=validator.js.map
