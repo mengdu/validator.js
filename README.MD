@@ -9,20 +9,27 @@
 
 ## use
 
-run:
+install:
 
 ```bat
-npm install
-
-// build
-npm run build
-
-// run
-npm run dev
+npm install -S v
 
 ```
 
-非es6环境，请使用生成的 `dist/validator.js` 。
+```js
+const Validator = require('v')
+
+var valid = Validator.validate(data, {})
+
+```
+
+**浏览器中使用**:
+
+```html
+<script type="text/javascript" src="dist/validator.min.js"></script>
+
+```
+
 
 ## demo
 
