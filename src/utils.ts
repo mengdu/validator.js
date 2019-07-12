@@ -9,3 +9,19 @@ export function isFun (val: any) {
 export function isAsyncFun (val: any) {
   return Object.prototype.toString.call(val) === '[object AsyncFunction]'
 }
+
+export function isUndefined (val: any) {
+  return typeof val === 'undefined'
+}
+
+export function isNull (val: any) {
+  return Object.prototype.toString.call(val) === '[object Null]'
+}
+
+export function isSymbol (val: any) {
+  return Object.prototype.toString.call(val) === '[object Symbol]'
+}
+
+export function isRegExp (val: any) {
+  return Object.prototype.toString.call(val) === '[object RegExp]'
+}
