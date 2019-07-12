@@ -1,6 +1,6 @@
 .tmp/
 .DS_Store
-dest/
+dest/*
 node_modules/
 npm-debug.log*
 yarn-debug.log*
