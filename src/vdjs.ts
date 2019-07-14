@@ -1,4 +1,4 @@
-import { isArr, isFun, isUndefined } from './utils'
+import { isArr, isFun, isUndefined, isObj } from './utils'
 /* eslint-disable-next-line no-unused-vars */
 import rulesFuns, { ruleType } from './rules'
 
@@ -15,7 +15,7 @@ type analyzerResult = {
  * @param {ruleType | ruleType[]} rules - 验证描述
  * @returns {Promise<validRuleResult>}
  * **/
-export async function validateRule (value: any, rules: ruleType | ruleType[]): Promise<validRuleResult> {
+async function validateRule (value: any, rules: ruleType | ruleType[]): Promise<validRuleResult> {
   if (isArr(rules)) {
     const list = await Promise.all((<ruleType[]>rules).map((rule: ruleType) => validateRule(value, rule)))
     const valid: {[key: string]: any} = {}
@@ -48,7 +48,7 @@ export async function validateRule (value: any, rules: ruleType | ruleType[]): P
           validResult = isUndefined(value) ? true : await rulesFuns[key](value, ruleValue)
         }
 
-        const message = (<ruleType>rules).message || (<ruleType>rules).msg
+        const message = (<ruleType>rules).message || (<ruleType>rules).msg || ''
 
         dit[key] = {
           result: validResult,
@@ -128,6 +128,8 @@ function analyzer (data: { [key: string]: validRuleResult }): analyzerResult {
  * **/
 function validate (data: { [key: string]: any }, rules: rulesType): Promise<analyzerResult> {
   return new Promise(async (resolve, reject) => {
+    if (!isObj(data) || !isObj(rules)) return reject(new Error('The params `data` and `rules` must be an Object'))
+
     const keys = Object.keys(rules)
 
     const runs = keys.map(key => {
@@ -152,4 +154,7 @@ function validate (data: { [key: string]: any }, rules: rulesType): Promise<anal
   })
 }
 
-export default validate
+export {
+  validate,
+  validateRule
+}

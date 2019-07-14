@@ -1,3 +1,7 @@
-import validate from './vdjs'
+import { validate, validateRule} from './vdjs'
 
-export default validate
+export {
+  validate as default,
+  validate,
+  validateRule
+}
