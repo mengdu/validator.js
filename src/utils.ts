@@ -2,6 +2,10 @@ export function isArr (val: any) {
   return Array.isArray ? Array.isArray(val) : Object.prototype.toString.call(val) === '[object Array]'
 }
 
+export function isObj (val: any) {
+  return typeof val === 'object'
+}
+
 export function isFun (val: any) {
   return typeof val === 'function'
 }
