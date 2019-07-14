@@ -6,6 +6,8 @@ type variableType = 'string' | 'object' | 'array' | 'boolean' | 'number' | 'null
 export interface ruleType {
   [key: string]: any;
   message?: string;
+  msg?: string;
+
   /**
    * 必须的，非 undefined 则返回 true
    * **/
