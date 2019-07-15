@@ -27,7 +27,7 @@
     "vdjs"
   ],
   "files": [
-    "dist",
+    "dest",
     "src"
   ],
   "author": "lanyueos@qq.com",
