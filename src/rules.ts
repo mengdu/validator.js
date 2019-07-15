@@ -194,7 +194,7 @@ const rules: ruleType = {
   in (value, ruleValue) {
     if (isArr(ruleValue) || typeof ruleValue === 'string') return (<any[] | string>ruleValue).indexOf(value) > -1
 
-    return typeof (<object>ruleValue) === 'undefined'
+    return (<object>ruleValue).hasOwnProperty(value)
   },
 
   notIn (value, ruleValue) {
