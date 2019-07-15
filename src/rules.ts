@@ -1,4 +1,4 @@
-import { isArr, isNull, isSymbol, isRegExp } from './utils'
+import { isArr, isNull, isSymbol, isRegExp, isEmpty } from './utils'
 
 type ruleReturn = boolean | Promise<boolean>
 type ruleValidator = (value: any) => ruleReturn
@@ -112,6 +112,11 @@ export interface ruleType {
    * 匹配邮箱
    * **/
   email?: (value: any, ruleValue: RegExp | boolean) => ruleReturn;
+
+  /**
+   * true 时验证空，false时验证非空；'', null, undefined, [], {}, NaN
+   * **/
+  empty?: (value: any, ruleValue: boolean) => ruleReturn;
 }
 
 const rules: ruleType = {
@@ -245,6 +250,10 @@ const rules: ruleType = {
     if (ruleValue) return /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(value)
 
     return true
+  },
+
+  empty (value, ruleValue) {
+    return ruleValue ? isEmpty(value) : !isEmpty(value)
   }
 }
 

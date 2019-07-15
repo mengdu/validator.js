@@ -29,3 +29,23 @@ export function isSymbol (val: any) {
 export function isRegExp (val: any) {
   return Object.prototype.toString.call(val) === '[object RegExp]'
 }
+
+export function isEmptyObject (val: object) {
+  for (const key in val) {
+    return false
+  }
+
+  return true
+}
+
+// '', null, undefined, [], {}, NaN
+export function isEmpty (val: any) {
+  if (isArr(val)) return val.length === 0
+  if (isNull(val)) return true
+  if (isObj(val)) return isEmptyObject(val)
+  if (isUndefined(val)) return true
+  if (isNaN(val)) return true
+  if (val === '') return true
+
+  return false
+}
