@@ -62,6 +62,7 @@ describe('test validate function', function () {
 
     expect(valid.fails()).toBe(false)
     expect(valid.message()).toBe('')
+    expect(valid.valid.key.valid.eq.result).toBe(true)
 
     // 提供了才验证
     const valid2 = await vdjs.validate({
@@ -70,6 +71,23 @@ describe('test validate function', function () {
 
     expect(valid2.fails()).toBe(true)
     expect(valid2.message()).toBe('`key` === test')
+    expect(valid2.valid.key.valid.eq.result).toBe(false)
+
+    // required = false
+    const res = await vdjs.validate({}, {
+      key: { required: false, msg: '' }
+    })
+
+    expect(res.fails()).toBe(false)
+    expect(res.valid.key.valid.required.result).toBe(true)
+
+    // required = false & 提供了key
+    const res2 = await vdjs.validate({ key: 'xx' }, {
+      key: { required: false, msg: '' }
+    })
+
+    expect(res2.fails()).toBe(false)
+    expect(res2.valid.key.valid.required.result).toBe(true)
   })
 
   test('multiple rules', async () => {
@@ -80,6 +98,56 @@ describe('test validate function', function () {
     })
 
     expect(valid.fails()).toBe(true)
+    expect(valid.valid.name.valid.required.result).toBe(true)
+    expect(valid.valid.name.valid.length.result).toBe(false)
     expect(valid.message()).toBe('Required, length >= 5 and length <= 10')
+
+    // 多个rule
+    const res = await vdjs.validate({
+      key: '123'
+    }, {
+      key: [
+        { not: '123456', msg: 'not :ruleValue' },
+        { like: '123%', msg: 'like 123' },
+        { math: /^\d+$/, msg: 'number string' },
+        { length: [6, 10], msg: 'length 6 ~ 10' }
+      ]
+    })
+
+    expect(res.fails()).toBe(true)
+    expect(res.message(true)).toEqual(['length 6 ~ 10'])
+    expect(res.valid.key.valid.not.result).toBe(true)
+    expect(res.valid.key.valid.like.result).toBe(true)
+    expect(res.valid.key.valid.math.result).toBe(true)
+    expect(res.valid.key.valid.length.result).toBe(false)
+
+    // 多个键
+    const res2 = await vdjs.validate({
+      page: 1,
+      pageSize: 100,
+      doPage: true
+    }, {
+      page: { type: 'number', msg: 'number' },
+      pageSize: { type: 'number', between: [1, 50], msg: '`:attr` not verification passed' },
+      doPage: { type: 'boolean', msg: 'boolean' }
+    })
+
+    expect(res2.fails()).toBe(true)
+    expect(res2.message(true)).toEqual(['`pageSize` not verification passed'])
+    expect(res2.valid.page.valid.type.result).toBe(true)
+    expect(res2.valid.pageSize.valid.between.result).toBe(false)
+    expect(res2.valid.doPage.valid.type.result).toBe(true)
   })
+})
+
+test('test format message', async () => {
+  const res = await vdjs.validate({
+    key: '123'
+  }, {
+    key: { not: '123', message: ':attr - :rule - :ruleValue - :input' },
+    key2: { required: true, message: ':attr - :rule - :ruleValue - :input' },
+  })
+
+  expect(res.fails()).toBe(true)
+  expect(res.message(true)).toEqual(['key - not - 123 - 123', 'key2 - required - true - undefined'])
 })
